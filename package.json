@@ -1,0 +1,23 @@
+{
+  "name": "dejitajoho",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "cors": "^2.8.5",
+    "node-nvidia-smi": "^1.0.0",
+    "systeminformation": "^5.21.24",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "blessed": "^0.1.81"
+  }
+}
