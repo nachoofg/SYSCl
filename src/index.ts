@@ -11,7 +11,6 @@ const screen = blessed.screen({
     title: 'System Monitor'
 });
 
-// Crear tabla
 const table = blessed.listtable({
     parent: screen,
     top: 'center',
