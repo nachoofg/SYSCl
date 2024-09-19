@@ -3,7 +3,6 @@ import { MEM } from "./functions/ram";
 import { GR } from "./functions/graphics";
 import { nvidia } from "./functions/nvidia";
 import { disk } from "./functions/disk";
-import { BATT } from "./functions/battery";
 import blessed from 'blessed';
 
 const screen = blessed.screen({
@@ -33,25 +32,24 @@ let staticData = [];
 async function getStaticData() {
     const cpu = await CPU();
     const graphicsInfo = await GR();
-    const gpu = await nvidia();
+    const diskInfo = await disk()
     staticData = [
         ['CPU Model', `${cpu.CPU_model}`],
         ['CPU Brand', `${cpu.CPU_brand}`],
         ['CPU Cores', `${cpu.CPU_cores}`],
         //@ts-ignore
         ['Graphics Card', `${graphicsInfo.gfxname}`],
-        ['Graphics RAM (GB)', `${graphicsInfo.gfxram}`]
+        ['Graphics RAM (GB)', `${graphicsInfo.gfxram}`],
+        ['Disks', `${diskInfo.toString()}`]
     ];
 }
 
 async function updateDynamicData() {
     try {
-        const [cpu, mem, gpu, diskInfo, batteryInfo] = await Promise.all([
+        const [cpu, mem, gpu] = await Promise.all([
             CPU(),
             MEM(),
-            nvidia(),
-            disk(),
-            BATT()
+            nvidia()
         ]);
 
         table.setData([
@@ -64,8 +62,6 @@ async function updateDynamicData() {
             ['GPU Usage (%)', `${gpu.nvidia_load}%`],
             //@ts-ignore
             ['GPU Temp (°C)', `${gpu.nvidia_temp}°C`],
-            //@ts-ignore
-            ['Disk Used/Total (GB)', `${diskInfo.used} / ${diskInfo.total}`],
         ]);
 
         screen.render();

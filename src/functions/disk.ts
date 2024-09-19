@@ -1,16 +1,22 @@
 import { fsSize } from "systeminformation";
-export async function disk() {
-    var tt
-    var uss
-    var perr
-    (await fsSize()).map((item) => {
-        tt = Math.round(item.size / Math.pow(1024, 3)),
-            uss = Math.round(item.used / Math.pow(1024, 3)),
-            perr = Math.round(item.use)
-    })
-    return {
-        total: tt,
-        used: uss,
-        percent: perr
+
+function formatSize(sizeInGB: number): string {
+    if (sizeInGB >= 1024) {
+        return `${(sizeInGB / 1024).toFixed(1)} TB`;
+    } else {
+        return `${sizeInGB} GB`;
     }
 }
+
+export async function disk() {
+    const disks = await fsSize();
+    const results = disks.map((item, index) => {
+        const totalGB = Math.round(item.size / Math.pow(1024, 3));
+        const usedGB = Math.round(item.used / Math.pow(1024, 3));
+        const totalFormatted = formatSize(totalGB);
+        return `(Disk ${index + 1} (${item.fs}): ${usedGB}/${totalFormatted})`;
+    });
+    
+    return results.join(' ');
+}
+
